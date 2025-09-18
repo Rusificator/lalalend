@@ -1,0 +1,129 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex" id="noindex">
+    <title>Простая HTML страница</title>
+</head>
+<body>
+    <h1>Список гиперссылок</h1>
+    <ul>
+        <li><a href="http://kubsu.ru">Главная страница kubsu.ru (http)</a></li>
+        <li><a href="https://kubsu.ru">Главная страница kubsu.ru (https)</a></li>
+        <li><a href="https://kubsu.ru"><img src="https://kubsu.ru/sites/default/files/kubsu_logo.png" alt="KubSU Logo" width="100"></a></li>
+        <li><a href="/about">Внутренняя страница (сокращенная)</a></li>
+        <li><a href="/">Главная страница (сокращенная)</a></li>
+        <li><a href="#form">Фрагмент текущей страницы (форма)</a></li>
+        <li><a href="/search?param1=value1&param2=value2&param3=value3">Ссылка с тремя параметрами</a></li>
+        <li><a href="/page?id=123">Ссылка с параметром id</a></li>
+        <li><a href="page.html">Страница в текущем каталоге</a></li>
+        <li><a href="about/page.html">Страница в каталоге about</a></li>
+        <li><a href="../page.html">Страница в каталоге уровнем выше</a></li>
+        <li><a href="../../page.html">Страница в каталоге двумя уровнями выше</a></li>
+        <li>В этом <a href="/context">абзаце</a> есть контекстная ссылка.</li>
+        <li><a href="https://kubsu.ru/#footer">Фрагмент страницы kubsu.ru</a></li>
+        <li>
+            <img src="https://kubsu.ru/sites/default/files/kubsu_logo.png" alt="KubSU Logo" usemap="#image-map" width="100">
+            <map name="image-map">
+                <area shape="rect" coords="0,0,50,50" href="https://kubsu.ru" alt="Rectangle Link">
+                <area shape="circle" coords="75,25,25" href="https://kubsu.ru/about" alt="Circle Link">
+            </map>
+        </li>
+        <li><a href="">Ссылка с пустым href</a></li>
+        <li><a>Ссылка без href</a></li>
+        <li><a href="/no-crawl" rel="nofollow">Ссылка, запрещенная для перехода поисковикам</a></li>
+        <li><a href="/no-index">Ссылка на страницу, запрещенную для индексации</a></li>
+        <li>
+            <ol>
+                <li><a href="/page1" title="Первая страница">Страница 1</a></li>
+                <li><a href="/page2" title="Вторая страница">Страница 2</a></li>
+                <li><a href="/page3" title="Третья страница">Страница 3</a></li>
+            </ol>
+        </li>
+        <li><a href="ftp://user:password@ftp.example.com/file.txt">Ссылка на FTP с авторизацией</a></li>
+    </ul>
+
+    <h1 id="form">Форма</h1>
+    <form action="/submit" method="post">
+        <label for="fio">ФИО:</label><br>
+        <input type="text" id="fio" name="fio" required><br><br>
+
+        <label for="phone">Телефон:</label><br>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="email">E-mail:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="birthdate">Дата рождения:</label><br>
+        <input type="date" id="birthdate" name="birthdate" required><br><br>
+
+        <label>Пол:</label><br>
+        <input type="radio" id="male" name="gender" value="male" required>
+        <label for="male">Мужской</label>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Женский</label><br><br>
+
+        <label for="programming">Любимый язык программирования:</label><br>
+        <select id="programming" name="programming" multiple required>
+            <option value="Pascal">Pascal</option>
+            <option value="C">C</option>
+            <option value="C++">C++</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="PHP">PHP</option>
+            <option value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="Haskell">Haskell</option>
+            <option value="Clojure">Clojure</option>
+            <option value="Prolog">Prolog</option>
+            <option value="Scala">Scala</option>
+        </select><br><br>
+
+        <label for="bio">Биография:</label><br>
+        <textarea id="bio" name="bio" rows="5" cols="30" required></textarea><br><br>
+
+        <input type="checkbox" id="contract" name="contract" required>
+        <label for="contract">С контрактом ознакомлен(а)</label><br><br>
+
+        <button type="submit">Сохранить</button>
+    </form>
+</body>
+</html>
