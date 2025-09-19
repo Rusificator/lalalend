@@ -35,9 +35,10 @@
 
     <main class="container">
         <h1>Задание 2 - Разработка пользовательского web-интерфейса</h1>
+        <section>
     <h2>Маркированный список</h2>
 
-    <ul>
+    <ul class="links-list">
       <li>1. <a href="http://kubsu.ru/">Абсолютная ссылка на kubsu.ru (HTTP)</a></li>
     <li>2. <a href="https://kubsu.ru/">Абсолютная ссылка на kubsu.ru (HTTPS)</a></li>
      <li>3. Ссылка-изображение: <a href="https://kubsu.ru/" ><img src="18-02-2017_27.jpg" alt="Логотип КубГУ" width="150"></a></li>
@@ -62,22 +63,22 @@
             <li>19. <a href="https://kubsu.ru" rel="noindex">Ссылка, запрещенная для индексации поисковиками</a></li>
            
             <li>21. <a href="ftp://example.com/">Ссылка на файл на сервере FTP с авторизацией</a></li>
-
-
     </ul>
-
-    
+</section>
+        <section>
         <h2>15. Ссылки из областей картинки </h2>
         <p>Дерево - ссылка на английскую версию сайта КУБГУ</p>
         <p>Надпись - ссылка на русскую версию сайта КУБГУ</p>
+        <div style="text-align: center;">
             <img src="18-02-2017_27.jpg" alt="Пример изображения с областями" usemap="#examplemap" class="image-map">
             <map name="examplemap">
                 <area shape="rect" coords="0,275,400,400" href="https://kubsu.ru" alt="Прямоугольная область" title="https://kubsu.ru">
                 <area shape="circle" coords="200,105,150" href="https://kubsu.ru/en" alt="Круглая область" title="https://kubsu.ru/en" >
             </map>
-     
+        </div>
+     </section>
 
-    
+    <section>
         <h2>20. Нумерованный список ссылок с подписями title</h2>
         <ol>
             <li><a href="https://kubsu.ru" title="Официальный сайт Кубанского государственного университета">Сайт КубГУ</a></li>
@@ -86,12 +87,16 @@
             <li><a href="https://kubsu.ru/ru/science" title="Научная деятельность">Наука</a></li>
             <li><a href="https://kubsu.ru/ru/abiturient" title="Информация для абитуриентов">Абитуриентам</a></li>
         </ol>
-    
+    </section>
 
      
         <h2 id="fragment" >Фрагмент текущей страницы</h2>
         <p>Это фрагмент страницы, на который ведет ссылка из первого раздела.(п.6)</p>
     
+
+
+
+
   <section>
     <h2>Форма</h2>
 <form id="userForm">
@@ -107,14 +112,14 @@
 
 <div class="form-group">
      <label for="phone">Телефон: </label><br>
-     <input type="tel" id="phone" name="name" required pattern="">
+     <input type="tel" id="phone" name="name" required pattern="[\+]\d{1}\s?[\(]\d{3}[\)\s?\d{3}[\-]\d{2}[\-]\d{2}" placeholder="+7(999)999-99-99">
      <div class="error-massage">Пожалуйста, введите телефон в формате +7(999)999-99-99</div>
 </div>
 
 
 <div class="form-group">
     <label for="email">Email: </label><br>
-    <input type="email" name="email">
+    <input type="email" id="email" name="email" required>
     <div class="error-massage">Пожалуйста, введите корректный email</div>
 </div>
 
@@ -161,7 +166,7 @@
 <div class="form-group">
     <label for="bio">Биография:</label><br>
      <textarea id="bio" name="bio" required minlength="10"></textarea>
-     <div class="error-massage">Необходимо принять условие соглашения</div>
+     <div class="error-massage">Введите минимум 10 символов</div>
 </div>
 
 <div class="form-group">
